@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .header {
+        background: #e1d4dd;
+    }
+
+    .author {
+        font-size: 20px;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+        font-family: "montserrat";
+        padding: 15px;
+    }
+
+    h2 {
+        font: bold 10px;
+        font-family: "montserrat";
+        padding: 4px;
+    }
+
+    h3 {
+        font: bold 8px;
+    }
+
+    .btn {
+        border: 1px solid #a37b97;
+        background: none;
+        padding: 20px 20px;
+        font-size: 24px;
+        font-family: "montserrat";
+        cursor: pointer;
+        margin: 10px;
+        transition: 0.1s;
+        position: relative;
+        overflow: hidden;
+        border-radius: 34px;
+        width: 200px;
+        height: 70px;
+    }
+
+    .btn3 {
+        color: #fff;
+    }
+
+    .btn3:hover {
+        color: #a37b97;
+        border-radius: 34px
+    }
+
+    .btn::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 200px;
+        height: 200px;
+        background: #a37b97;
+        z-index: -1;
+        transition: 0.1s;
+        border-radius: 34px
+    }
+
+    .btn3::before {
+        top: 0;
+        border-radius: 0% 0% 50% 50%;
+    }
+
+    .btn3::before {
+        height: 180%;
+    }
+
+    .btn3:hover::before {
+        height: 0%;
+    }
+
+    .tab {
+        float: left;
+        /*width: 100%;*/
+    }
+
+    .slider_perspective {
+        -webkit-appearance: none;
+        height: 10px;
+        background: #ccc;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+        border-radius: 34px;
+    }
+
+    .slider_perspective:hover {
+        opacity: 1;
+    }
+
+    .slider_perspective::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 15px;
+        height: 15px;
+        background: #a37b97;
+        cursor: pointer;
+        border-radius: 34px;
+    }
+
+    .card {
+        margin: 10px 10px 10px 10px;
+        border: 1px solid #a37b97;
+        width: 300px;
+        height: 330px;
+        border-radius: 34px;
+        padding: 10px 10px 10px 10px;
+    }
+
+    .card-header_figure {
+        margin: 10px 10px 10px 10px;
+        border: 1px solid #a37b97;
+        height: 515px;
+        border-radius: 34px;
+        padding: 15px 15px 15px 15px;
+    }
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 20px;
+        margin: 0 3px;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+    .switch input {
+        display: none
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 11px;
+        width: 11px;
+        left: 4px;
+        bottom: 5px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 12px;
+    }
+
+    input:checked+.slider {
+        background-color: #a37b97;
+    }
+
+    input:checked+.slider:before {
+        transform: translateX(30px);
+    }
+</style>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+#version 300 es
+
+in vec4 aPosition;
+in vec3 aNormal;
+in vec2 aTexCoord;
+in vec2 aTexCoordLeg;
+in vec2 aTexCoordBody;
+in vec3 aTangent;
+
+uniform mat4 uModelViewMatrix;
+uniform mat4 uProjectionMatrix;
+uniform mat3 uNormalMatrix;
+uniform bool uBumpMapFlag;
+
+uniform bool textureBody;
+uniform bool textureLeg;
+uniform bool textureGrass;
+
+uniform mat4 uMov;
+
+/* LIGHT */
+uniform vec4 uLightPosition;
+uniform vec4 uAmbientProduct;
+uniform vec4 uDiffuseProduct;
+uniform vec4 uSpecularProduct;
+
+out vec2 vTexCoord;
+out vec2 vTexCoordLeg;
+out vec2 vTexCoordBody;
+out vec3 vL;
+out vec3 vE;
+out vec3 vNN;
+
+void main()
+{
+    gl_Position = uProjectionMatrix * uModelViewMatrix * uMov * aPosition;
+    vTexCoord = aTexCoord;
+    vTexCoordLeg = aTexCoordLeg;
+    vTexCoordBody = aTexCoordBody;
+
+    vec4 NN = vec4(aNormal, 0.0);
+    vec4 TT = vec4(aTangent, 0.0);
+
+    if(uBumpMapFlag == true && (textureBody == true || textureLeg==true || textureGrass == true)){
+        vec3 N = normalize(uNormalMatrix * (uMov * NN).xyz);
+        vec3 T = normalize(uNormalMatrix * (uMov * TT).xyz);
+        vNN = normalize((uModelViewMatrix * uMov * NN).xyz);
+
+        vec3 pos = (uModelViewMatrix * uMov * aPosition).xyz;
+        vec3 B = cross(N, T);
+        vE = normalize(-pos);
+
+        vec3 eyeLightPos = (uModelViewMatrix * uLightPosition).xyz;
+
+        vec3 L;
+        L.x = dot(T, eyeLightPos - pos);
+        L.y = dot(B, eyeLightPos - pos);
+        L.z = dot(N, eyeLightPos - pos);
+        L = normalize(L);
+        vL = L;
+
+    } else {
+        vec3 N = normalize((uModelViewMatrix * uMov * NN).xyz);
+        vNN = normalize((uModelViewMatrix * uMov * NN).xyz);
+
+        vec3 pos = (uModelViewMatrix * uMov * aPosition).xyz;
+        vE = normalize(-pos);
+
+        vec3 eyeLightPos = (uModelViewMatrix * uLightPosition).xyz;
+        vec3 L = normalize(eyeLightPos - pos);
+        vL = L;
+    }
+}
+
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+#version 300 es
+
+precision mediump float;
+
+out vec4 fColor;
+
+uniform sampler2D uTextureMapBody;
+uniform sampler2D uTextureMapBodyNormalMap;
+uniform sampler2D uTextureMapHead;
+uniform sampler2D uTextureMapFence;
+uniform sampler2D uTextureMapGrass;
+uniform sampler2D uTextureMapGrassNormalMap;
+uniform bool uLightFlag;
+uniform vec4 uAmbientProduct;
+uniform vec4 uDiffuseProduct;
+uniform vec4 uSpecularProduct;
+uniform float uShininess;
+uniform bool uBumpMapFlag;
+
+uniform bool textureBody;
+uniform bool textureHead;
+uniform bool textureLeg;
+uniform bool textureFence;
+uniform bool textureGrass;
+
+in vec2 vTexCoord;
+in vec2 vTexCoordLeg;
+in vec2 vTexCoordBody;
+in vec3 vEmission;
+in vec3 vL;
+in vec3 vE;
+in vec3 vNN;
+
+void main()
+{
+    vec4 ambient;
+    vec4 diffuse;
+    vec4 specular;
+    if(uBumpMapFlag == true && textureBody == true){
+        vec4 Nt = texture(uTextureMapBodyNormalMap, vTexCoordBody);
+        vec3 NNt = normalize(2.0*Nt.xyz-1.0);
+
+        vec3 H = normalize(vL + vE);
+        ambient = uAmbientProduct;
+        vec3 LL = normalize(vL);
+        float Kd = max(dot(LL, NNt), 0.0);
+        diffuse = Kd * uDiffuseProduct;
+        float Ks = pow( max(dot(NNt, H), 0.0), uShininess );
+        specular = Ks * uSpecularProduct;
+        if( dot(H, NNt) < 0.0 ) {
+        specular = vec4(0.0, 0.0, 0.0, 1.0);
+        }
+    } else if(uBumpMapFlag == true && textureLeg ==  true){
+        vec4 Nt = texture(uTextureMapBodyNormalMap, vTexCoordLeg);
+        vec3 NNt = normalize(2.0*Nt.xyz-1.0);
+
+        vec3 H = normalize(vL + vE);
+        ambient = uAmbientProduct;
+        vec3 LL = normalize(vL);
+        float Kd = max(dot(LL, NNt), 0.0);
+        diffuse = Kd * uDiffuseProduct;
+        float Ks = pow( max(dot(NNt, H), 0.0), uShininess );
+        specular = Ks * uSpecularProduct;
+        if( dot(H, NNt) < 0.0 ) {
+        specular = vec4(0.0, 0.0, 0.0, 1.0);
+        }
+    }else if(uBumpMapFlag == true && textureGrass ==  true){
+        vec4 Nt = texture(uTextureMapGrassNormalMap, vTexCoord);
+        vec3 NNt = normalize(2.0*Nt.xyz-1.0);
+
+        vec3 H = normalize(vL + vE);
+        ambient = uAmbientProduct;
+        vec3 LL = normalize(vL);
+        float Kd = max(dot(LL, NNt), 0.0);
+        diffuse = Kd * uDiffuseProduct;
+        float Ks = pow( max(dot(NNt, H), 0.0), uShininess );
+        specular = Ks * uSpecularProduct;
+        if( dot(H, NNt) < 0.0 ) {
+        specular = vec4(0.0, 0.0, 0.0, 1.0);
+        }
+    }else {
+        vec3 NNt = vNN;
+
+        vec3 H = normalize(vL + vE);
+        ambient = uAmbientProduct;
+        vec3 LL = normalize(vL);
+        float Kd = max(dot(LL, NNt), 0.0);
+        diffuse = Kd * uDiffuseProduct;
+        float Ks = pow( max(dot(NNt, H), 0.0), uShininess );
+        specular = Ks * uSpecularProduct;
+        if( dot(H, NNt) < 0.0 ) {
+        specular = vec4(0.0, 0.0, 0.0, 1.0);
+        }
+    }
+
+    if(textureBody == true){
+        fColor = (ambient + diffuse + specular) * texture(uTextureMapBody, vTexCoordBody);
+        fColor.a = 1.0;
+    }else if(textureLeg == true){
+        fColor = (ambient + diffuse + specular) * texture(uTextureMapBody, vTexCoordLeg);
+        fColor.a = 1.0;
+    }
+    else if(textureHead == true){
+        fColor = (ambient + diffuse + specular) * texture(uTextureMapHead, vTexCoord);
+        fColor.a = 1.0;
+    }
+    else if(textureFence == true){
+        fColor = (ambient + diffuse + specular) * texture(uTextureMapFence, vTexCoord);
+        fColor.a = 1.0;
+    }
+    else if(textureGrass == true){
+        fColor = (ambient + diffuse + specular) * texture(uTextureMapGrass, vTexCoord);
+        fColor.a = 1.0;
+    }
+    else {
+        fColor = vec4(1.0, 1.0, 0.0, 1.0);
+    }
+}
+
+</script>
+
+<script type="text/javascript" src="../Common/InitShaders.js"></script>
+<script type="text/javascript" src="../Common/MVnew.js"></script>
+<script type="text/javascript" src="Homework2.js"></script>
+
+<body>
+
+<img id="tex_body" src="wool.jpg" crossorigin="anonymous" hidden> </img>
+<img id="tex_body_normal_map" src="NormalMapWool.jpg" crossorigin="anonymous" hidden> </img>
+<img id="tex_head" src="head.png" crossorigin="anonymous" hidden> </img>
+<img id="tex_fence" src="wood.jpg" crossorigin="anonymous" hidden> </img>
+<img id="tex_grass" src="grass.jpg" crossorigin="anonymous" hidden> </img>
+<img id="tex_grass_normal_map" src="NormalMapGrass.jpg" crossorigin="anonymous" hidden> </img>
+
+
+<header class="header">
+    <h1> Homework 2 - Interactive Graphics </h1>
+    <h1 class="author"><i>@Author: Denise Landini - 1938388 </i></h1>
+</header>
+
+<table class="tab">
+    <th>
+
+            <div class="card">
+                <div>
+                    <h2>Animation</h2>
+                </div>
+                <div>
+                    <button id="StartAnimation" class="btn btn3">Play</button>
+                </div>
+                <div>
+                    <button id="ResetAnimation" class="btn btn3">Reset</button>
+                </div>
+                <div>
+                    <h2> Bump Map </h2>
+                    <label class="switch">
+                       <input type="checkbox" checked>
+                       <span id="BumpMap" class="slider"></span>
+                    </label>
+                </div>
+    </th>
+    <th rowspan="2">
+        <div class="card">
+            <h2> Perspective Commands</h2>
+            <div>
+                <h3> Far </h3>
+                1.0 <input type="range" min="1" max="2000.0" step="0.1" value="2000.0" class="slider_perspective"
+                           id="zFarSlider"> 2000.0
+            </div>
+            <div>
+                <h3> Near </h3>
+                0.1 <input type="range" min="0.1" max="2.5" step="0.05" value="0.4" class="slider_perspective"
+                           id="zNearSlider"> 2.5
+            </div>
+            <div>
+                <h3> Radius </h3>
+                1.0 <input type="range" min="1.0" max="100.0" step="0.2" value="45.0" class="slider_perspective"
+                           id="radiusSlider"> 100.0
+            </div>
+            <div>
+                <h3> Theta </h3>
+                -180 <input type="range" min="-180" max="180" step="4" value="10" class="slider_perspective"
+                            id="thetaSlider"> 180
+            </div>
+            <div>
+                <h3> Phi </h3>
+                -180 <input type="range" min="-180" max="180" step="4" value="-40" class="slider_perspective"
+                            id="phiSlider"> 180
+            </div>
+            <div>
+                <h3> Aspect </h3>
+                0.5 <input type="range" min="0.5" max="2.0" step="0.1" value="1.0" class="slider_perspective"
+                           id="aspectSlider"> 2.0
+            </div>
+            <div>
+                <h3> Fovy </h3>
+                10 <input type="range" min="10" max="50" step="5" value="45" class="slider_perspective"
+                          id="fovSlider"> 50
+            </div>
+        </div>
+    </th>
+
+    <th>
+        <div class="card-header_figure">
+            <div>
+                <canvas style="float: left" id="gl-canvas" width="512" height="512">
+                    Oops ... your browser doesn't support the HTML5 canvas element
+                </canvas>
+            </div>
+        </div>
+    </th>
+</table>
+
+</body>
+</html>
+
