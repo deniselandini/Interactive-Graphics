@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .header {
+        background: #e1d4dd
+    }
+
+    .btn {
+        border: 1px solid #a37b97;
+        background: none;
+        padding: 10px 20px;
+        font-size: 17px;
+        font-family: "montserrat";
+        cursor: pointer;
+        margin: 2px;
+        transition: 0.1s;
+        position: relative;
+        overflow: hidden;
+
+    }
+
+    .btn3 {
+        color: #fff;
+    }
+
+    .btn3:hover {
+        color: #a37b97;
+    }
+
+    .btn::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 0%;
+        background: #a37b97;
+        z-index: -1;
+        transition: 0.1s;
+    }
+
+    .btn3::before {
+        top: 0;
+        border-radius: 0% 0% 50% 50%;
+    }
+
+    .btn3::before {
+        height: 180%;
+    }
+
+    .btn3:hover::before {
+        height: 0%;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+        font-family: "montserrat";
+        padding: 15px;
+    }
+
+    h2 {
+        font: bold 10px;
+        font-family: "montserrat";
+        padding: 4px;
+    }
+
+    h3 {
+        font: bold 8px;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 20px;
+        margin: 0 3px;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+    .switch input {
+        display: none
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 11px;
+        width: 11px;
+        left: 4px;
+        bottom: 5px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 12px;
+    }
+
+    input:checked+.slider {
+        background-color: #a37b97;
+    }
+
+    input:checked+.slider:before {
+        transform: translateX(30px);
+    }
+
+    .card {
+        margin: 10px 10px 10px 10px;
+        border: 1px solid #a37b97;
+        width: 300px;
+        border-radius: 34px;
+        padding: 10px 10px 10px 10px;
+    }
+
+    .card-header_figure {
+        margin: 10px 10px 10px 10px;
+        border: 1px solid #a37b97;
+        width: 700px;
+        height: 650px;
+        border-radius: 34px;
+        padding: 5px 5px 5px 5px;
+
+    }
+
+    .author {
+        font-size: 20px;
+    }
+
+    .tab {
+        width: 100%;
+    }
+
+    .slider_perspective {
+        -webkit-appearance: none;
+        height: 10px;
+        background: #ccc;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+        border-radius: 34px;
+    }
+
+    .slider_perspective:hover {
+        opacity: 1;
+    }
+
+    .slider_perspective::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 15px;
+        height: 15px;
+        background: #a37b97;
+        cursor: pointer;
+        border-radius: 34px;
+    }
+
+    .slidecontainer{
+        padding: 5px 0px 5px 0px;
+    }
+</style>
+
+<body>
+
+    <header class="header">
+        <h1> Homework 1 - Interactive Graphics </h1>
+        <h1 class="author"><i>@Author: Denise Landini - 1938388 </i></h1>
+    </header>
+
+    <table class="tab">
+        <tr>
+            <th>
+                <div class="card">
+                    <div>
+                        <h2>Rotation</h2>
+                    </div>
+                    <h3> Activate </h3>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span id="ButtonT" class="slider"> </span>
+                    </label>
+                    <div>
+                        <button id="ButtonX" class="btn btn3">Rotate X</button>
+                    </div>
+                    <div>
+                        <button id="ButtonY" class="btn btn3">Rotate Y</button>
+                    </div>
+                    <div>
+                        <button id="ButtonZ" class="btn btn3">Rotate Z</button>
+                    </div>
+                </div>
+            </th>
+
+            <th>
+                <div class="card">
+                    <div>
+                        <h2>Direction</h2>
+                    </div>
+                    <div class="slidecontainer">
+                        <h3> Direction X </h3>
+                        <input type="range" min="-3.0" max="3.0" step="0.2" value="0.3" class="slider_perspective"
+                            id="directionX">
+                    </div>
+                    <div class="slidecontainer">
+                        <h3> Direction Y </h3>
+                        <input type="range" min="-3.0" max="3.0" step="0.2" value="-0.2" class="slider_perspective"
+                            id="directionY">
+                    </div>
+                    <div class="slidecontainer">
+                        <h3> Direction Z </h3>
+                        <input type="range" min="-3.0" max="3.0" step="0.2" value="0.0" class="slider_perspective"
+                            id="directionZ">
+                    </div>
+                </div>
+            </th>
+
+
+            <th rowspan="4">
+                <div class="card-header_figure">
+                    <div>
+                        <canvas id="gl-canvas" width="512" height="512"></canvas>
+                    </div>
+                    <h1> Jar with cylinder neon light </h1>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <th rowspan="3">
+                <div class="card">
+                    <h2> Perspective Commands</h2>
+
+                    <div class="slidecontainer">
+                        <h3> Far </h3>
+                        1.0 <input type="range" min="1" max="5.0" step="0.1" value="10.0" class="slider_perspective"
+                            id="zFarSlider"> 10.0
+                    </div>
+                    <div class="slidecontainer">
+                        <h3> Near </h3>
+                        0.1 <input type="range" min="0.1" max="2.5" step="0.05" value="0.3" class="slider_perspective"
+                            id="zNearSlider"> 2.5
+                    </div>
+                    <div class="slidecontainer">
+                        <h3> Radius </h3>
+                        1.0 <input type="range" min="1.0" max="4.0" step="0.2" value="4.0" class="slider_perspective"
+                            id="radiusSlider"> 4.0
+                    </div>
+                    <div class="slidecontainer">
+                        <h3> Theta </h3>
+                        -180 <input type="range" min="-180" max="180" step="4" value="10" class="slider_perspective"
+                            id="thetaSlider"> 180
+                    </div>
+                    <div class="slidecontainer">
+                        <h3> Phi </h3>
+                        -180 <input type="range" min="-180" max="180" step="4" value="-145" class="slider_perspective"
+                            id="phiSlider"> 180
+                    </div>
+                    <div class="slidecontainer">
+                        <h3> Aspect </h3>
+                        0.5 <input type="range" min="0.5" max="2.0" step="0.1" value="1.0" class="slider_perspective"
+                            id="aspectSlider"> 2.0
+                    </div>
+                    <div class="slidecontainer">
+                        <h3> Fovy </h3>
+                        10 <input type="range" min="10" max="50" step="5" value="45" class="slider_perspective"
+                            id="fovSlider"> 50
+                    </div>
+                </div>
+            </th>
+            <th>
+                <div class="card">
+                    <h2> Texture </h2>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span id="EnableTexture" class="slider"></span>
+                    </label>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                <div class="card">
+                    <h2> Per vertex / Per fragment </h2>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span id="VertexFragment" class="slider"></span>
+                    </label>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                <div class="card">
+                    <h2> Neon Light </h2>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span id="Light" class="slider"></span>
+                    </label>
+                </div>
+            </th>
+        </tr>
+    </table>
+
+    <script id="vertex-shader_per-vertex" type="x-shader/x-vertex">
+        #version 300 es
+
+        in vec4 aPosition;
+        in vec3 aNormal;
+        in vec2 aTexCoord;
+        in vec3 aTangent;
+        in vec3 aEmission;
+
+        out vec4 vColor;
+        out vec2 vTexCoord;
+
+        uniform bool uLightFlag;
+
+        uniform vec4 uLightPosition_one, uLightPosition_two, uLightPosition_three;
+        uniform vec4 uAmbientProduct_one, uAmbientProduct_two, uAmbientProduct_three;
+        uniform vec4 uDiffuseProduct_one, uDiffuseProduct_two, uDiffuseProduct_three;
+        uniform vec4 uSpecularProduct_one, uSpecularProduct_two, uSpecularProduct_three;
+        uniform float uShininess;
+
+        uniform mat4 uMoveMatrix;
+        uniform mat4 uModelViewMatrix;
+        uniform mat4 uProjectionMatrix;
+
+        uniform sampler2D uTextureMap;
+
+        void main()
+        {
+            vTexCoord = aTexCoord;
+            vec4 EmEm = vec4(aEmission, 1.0);
+
+            if(uLightFlag == true){
+                vec4 NN = vec4(aNormal, 0.0);
+
+                gl_Position = uProjectionMatrix * uModelViewMatrix * uMoveMatrix * aPosition;
+                vec3 pos = (uMoveMatrix * aPosition).xyz;
+                vec3 N = normalize((uMoveMatrix * NN).xyz);
+
+                vec3 E = normalize(-pos);
+
+                // First light
+                vec3 light_one = uLightPosition_one.xyz;
+                vec3 L_one = normalize(light_one - pos);
+                vec3 H_one = normalize(L_one + E);
+
+                // Second light
+                vec3 light_two = uLightPosition_two.xyz;
+                vec3 L_two = normalize(light_two - pos);
+                vec3 H_two = normalize(L_two + E);
+
+                // Third light
+                vec3 light_three = uLightPosition_three.xyz;
+                vec3 L_three = normalize(light_three - pos);
+                vec3 H_three = normalize(L_three + E);
+
+                // Compute terms in the illumination equation for the first light
+                vec4 ambient_one = uAmbientProduct_one;
+                vec3 LL_one = normalize(L_one);
+                float Kd_one = max(dot(LL_one, N), 0.0);
+                vec4 diffuse_one = Kd_one*uDiffuseProduct_one;
+                float Ks_one = pow( max(dot(N, H_one), 0.0), uShininess );
+                vec4 specular_one = Ks_one * uSpecularProduct_one;
+                if( dot(LL_one, N) < 0.0 ) {
+                specular_one = vec4(0.0, 0.0, 0.0, 1.0);
+                }
+
+                // Compute terms in the illumination equation for the second light
+                vec4 ambient_two = uAmbientProduct_two;
+                vec3 LL_two = normalize(L_two);
+                float Kd_two = max(dot(LL_two, N), 0.0);
+                vec4 diffuse_two = Kd_two*uDiffuseProduct_two;
+                float Ks_two = pow( max(dot(N, H_two), 0.0), uShininess );
+                vec4 specular_two = Ks_two * uSpecularProduct_two;
+                if( dot(LL_two, N) < 0.0 ) {
+                specular_two = vec4(0.0, 0.0, 0.0, 1.0);
+                }
+
+                // Compute terms in the illumination equation for the third light
+                vec4 ambient_three = uAmbientProduct_three;
+                vec3 LL_three = normalize(L_three);
+                float Kd_three = max(dot(LL_three, N), 0.0);
+                vec4 diffuse_three = Kd_three*uDiffuseProduct_three;
+                float Ks_three = pow( max(dot(N, H_three), 0.0), uShininess );
+                vec4 specular_three = Ks_three * uSpecularProduct_three;
+                if( dot(LL_three, N) < 0.0 ) {
+                specular_three = vec4(0.0, 0.0, 0.0, 1.0);
+                }
+
+                vColor = ((ambient_one + diffuse_one + specular_one)
+                    + (ambient_two + diffuse_two + specular_two)
+                    + (ambient_three + diffuse_three + specular_three)) * EmEm;
+            }else{
+                gl_Position = uProjectionMatrix * uModelViewMatrix * uMoveMatrix * aPosition;
+                vColor = vec4(0.0, 0.0, 0.0, 1.0);
+            }
+        }
+    </script>
+
+    <script id="fragment-shader_per-vertex" type="x-shader/x-fragment">
+        #version 300 es
+
+        precision mediump float;
+
+        in vec4 vColor;
+        in vec2 vTexCoord;
+
+        out vec4 fColor;
+
+        void main()
+        {
+            fColor = vColor;
+        }
+    </script>
+
+    <script  id="vertex-shader_per-fragment" type="x-shader/x-vertex">
+        #version 300 es
+
+        in vec4 aPosition;
+        in vec3 aNormal;
+        in vec2 aTexCoord;
+        in vec3 aTangent;
+        in vec3 aEmission;
+
+        out vec2 vTexCoord;
+        out vec3 vEmission;
+        out vec3 vL_one;
+        out vec3 vL_two;
+        out vec3 vL_three;
+        out vec3 vE;
+        out vec3 vNN;
+
+        uniform bool uLightFlag;
+        uniform vec4 uLightPosition_one, uLightPosition_two, uLightPosition_three;
+        
+        uniform mat4 uMoveMatrix;
+        uniform mat4 uModelViewMatrix;
+        uniform mat4 uProjectionMatrix;
+        uniform mat3 uNormalMatrix;
+
+        uniform bool uTextureFlag;
+
+        void main()
+        {
+            vTexCoord = aTexCoord;
+            vEmission = aEmission;
+            vec4 EmEm = vec4(aEmission, 1.0);
+
+            if(uLightFlag == true){
+                if(uTextureFlag == true){
+                    vec4 NN = vec4(aNormal, 0.0);
+                    vec4 TT = vec4(aTangent, 0.0);
+    
+                    gl_Position = uProjectionMatrix * uModelViewMatrix * uMoveMatrix * aPosition;
+                    vec3 N = normalize( uNormalMatrix * ( uMoveMatrix * NN).xyz );
+                    vec3 T = normalize( uNormalMatrix * ( uMoveMatrix * TT).xyz );
+                    vNN = normalize((uModelViewMatrix * uMoveMatrix * NN).xyz);
+    
+                    vec3 pos = (uModelViewMatrix * uMoveMatrix * aPosition).xyz;
+                    vec3 B = cross(N, T);
+                    vE = normalize(-pos);
+    
+                    vec3 eyeLightPos_one = (uModelViewMatrix * uLightPosition_one).xyz;
+                    vec3 eyeLightPos_two = (uModelViewMatrix * uLightPosition_two).xyz;
+                    vec3 eyeLightPos_three = (uModelViewMatrix * uLightPosition_three).xyz;
+    
+                    vec3 L_one;
+                    L_one.x = dot(T, eyeLightPos_one - pos);
+                    L_one.y = dot(B, eyeLightPos_one - pos);
+                    L_one.z = dot(N, eyeLightPos_one - pos);
+                    L_one = normalize(L_one);
+    
+                    vec3 L_two;
+                    L_two.x = dot(T, eyeLightPos_two - pos);
+                    L_two.y = dot(B, eyeLightPos_two - pos);
+                    L_two.z = dot(N, eyeLightPos_two - pos);
+                    L_two = normalize(L_two);
+    
+                    vec3 L_three;
+                    L_three.x = dot(T, eyeLightPos_three - pos);
+                    L_three.y = dot(B, eyeLightPos_three - pos);
+                    L_three.z = dot(N, eyeLightPos_three - pos);
+                    L_three = normalize(L_three);
+    
+                    vL_one = L_one;
+                    vL_two = L_two;
+                    vL_three = L_three;
+                } else {
+                    vec4 NN = vec4(aNormal, 0.0);
+
+                    gl_Position = uProjectionMatrix * uModelViewMatrix * uMoveMatrix * aPosition;
+                    vec3 pos = (uMoveMatrix * aPosition).xyz;
+                    vec3 N = normalize((uMoveMatrix * NN).xyz);
+                    vNN = N;
+
+                    vE = normalize(-pos);
+
+                    // First light
+                    vec3 light_one = uLightPosition_one.xyz;
+                    vec3 L_one = normalize(light_one - pos);
+
+                    // Second light
+                    vec3 light_two = uLightPosition_two.xyz;
+                    vec3 L_two = normalize(light_two - pos);
+
+                    // Third light
+                    vec3 light_three = uLightPosition_three.xyz;
+                    vec3 L_three = normalize(light_three - pos);
+
+                    vL_one = L_one;
+                    vL_two = L_two;
+                    vL_three = L_three;
+                }
+
+            }else{
+                gl_Position = uProjectionMatrix * uModelViewMatrix * uMoveMatrix * aPosition;
+            }
+        }
+    </script>
+
+    <script  id="fragment-shader_per-fragment" type="x-shader/x-fragment">
+        #version 300 es
+            
+        precision mediump float;
+        
+        in vec2 vTexCoord;
+        in vec3 vEmission;
+        in vec3 vL_one;
+        in vec3 vL_two;
+        in vec3 vL_three;
+        in vec3 vE;
+        in vec3 vNN;
+        
+        uniform sampler2D uTextureMap;
+        uniform bool uTextureFlag;
+
+        uniform bool uLightFlag;
+
+        uniform vec4 uAmbientProduct_one, uAmbientProduct_two, uAmbientProduct_three;
+        uniform vec4 uDiffuseProduct_one, uDiffuseProduct_two, uDiffuseProduct_three;
+        uniform vec4 uSpecularProduct_one, uSpecularProduct_two, uSpecularProduct_three;
+        uniform float uShininess;
+        
+        out vec4 fColor;
+        
+        void main()
+        {
+            vec4 EmEm = vec4(vEmission, 1.0);
+
+            if(uLightFlag == true){
+                if(uTextureFlag == true){
+                    vec4 Nt = texture(uTextureMap, vTexCoord);
+                    vec3 NNt =  normalize(2.0*Nt.xyz-1.0);
+                    //NNt = vNN;
+
+                    vec3 H_one = normalize(vL_one + vE);
+                    vec3 H_two = normalize(vL_two + vE);
+                    vec3 H_three = normalize(vL_three + vE);
+
+                    // Compute terms in the illumination equation for the first light
+                    vec4 ambient_one = uAmbientProduct_one;
+                    vec3 LL_one = normalize(vL_one);
+                    float Kd_one = max(dot(LL_one, NNt), 0.0);
+                    vec4 diffuse_one = Kd_one*uDiffuseProduct_one;
+                    float Ks_one = pow( max(dot(NNt, H_one), 0.0), uShininess );
+                    vec4 specular_one = Ks_one * uSpecularProduct_one;
+                    if( dot(LL_one, NNt) < 0.0 ) {
+                    specular_one = vec4(0.0, 0.0, 0.0, 1.0);
+                    }
+
+                    // Compute terms in the illumination equation for the second light
+                    vec4 ambient_two = uAmbientProduct_two;
+                    vec3 LL_two = normalize(vL_two);
+                    float Kd_two = max(dot(LL_two, NNt), 0.0);
+                    vec4 diffuse_two = Kd_two*uDiffuseProduct_two;
+                    float Ks_two = pow( max(dot(NNt, H_two), 0.0), uShininess );
+                    vec4 specular_two = Ks_two * uSpecularProduct_two;
+                    if( dot(LL_two, NNt) < 0.0 ) {
+                    specular_two = vec4(0.0, 0.0, 0.0, 1.0);
+                    }
+
+                    // Compute terms in the illumination equation for the third light
+                    vec4 ambient_three = uAmbientProduct_three;
+                    vec3 LL_three = normalize(vL_three);
+                    float Kd_three = max(dot(LL_three, NNt), 0.0);
+                    vec4 diffuse_three = Kd_three*uDiffuseProduct_three;
+                    float Ks_three = pow( max(dot(NNt, H_three), 0.0), uShininess );
+                    vec4 specular_three = Ks_three * uSpecularProduct_three;
+                    if( dot(LL_three, NNt) < 0.0 ) {
+                    specular_three = vec4(0.0, 0.0, 0.0, 1.0);
+                    }
+
+                    fColor = ((ambient_one + diffuse_one + specular_one)
+                        + (ambient_two + diffuse_two + specular_two)
+                        + (ambient_three + diffuse_three + specular_three));// * EmEm;
+                } else {
+                    vec3 H_one = normalize(vL_one + vE);
+                    vec3 H_two = normalize(vL_two + vE);
+                    vec3 H_three = normalize(vL_three + vE);
+
+                    // Compute terms in the illumination equation for the first light
+                    vec4 ambient_one = uAmbientProduct_one;
+                    vec3 LL_one = normalize(vL_one);
+                    float Kd_one = max(dot(LL_one, vNN), 0.0);
+                    vec4 diffuse_one = Kd_one*uDiffuseProduct_one;
+                    float Ks_one = pow( max(dot(vNN, H_one), 0.0), uShininess );
+                    vec4 specular_one = Ks_one * uSpecularProduct_one;
+                    if( dot(LL_one, vNN) < 0.0 ) {
+                    specular_one = vec4(0.0, 0.0, 0.0, 1.0);
+                    }
+
+                    // Compute terms in the illumination equation for the second light
+                    vec4 ambient_two = uAmbientProduct_two;
+                    vec3 LL_two = normalize(vL_two);
+                    float Kd_two = max(dot(LL_two, vNN), 0.0);
+                    vec4 diffuse_two = Kd_two*uDiffuseProduct_two;
+                    float Ks_two = pow( max(dot(vNN, H_two), 0.0), uShininess );
+                    vec4 specular_two = Ks_two * uSpecularProduct_two;
+                    if( dot(LL_two, vNN) < 0.0 ) {
+                    specular_two = vec4(0.0, 0.0, 0.0, 1.0);
+                    }
+
+                    // Compute terms in the illumination equation for the third light
+                    vec4 ambient_three = uAmbientProduct_three;
+                    vec3 LL_three = normalize(vL_three);
+                    float Kd_three = max(dot(LL_three, vNN), 0.0);
+                    vec4 diffuse_three = Kd_three*uDiffuseProduct_three;
+                    float Ks_three = pow( max(dot(vNN, H_three), 0.0), uShininess );
+                    vec4 specular_three = Ks_three * uSpecularProduct_three;
+                    if( dot(LL_three, vNN) < 0.0 ) {
+                    specular_three = vec4(0.0, 0.0, 0.0, 1.0);
+                    }
+
+                    fColor = ((ambient_one + diffuse_one + specular_one)
+                        + (ambient_two + diffuse_two + specular_two)
+                        + (ambient_three + diffuse_three + specular_three)) * EmEm;
+                }
+            }else{
+                fColor = vec4(0.0, 0.0, 0.0, 1.0);
+            }
+            
+        }
+    </script>
+
+    <script src="../Common/initShaders.js"></script>
+    <script src="../Common/MVnew.js"></script>
+    <script src="Homework1.js"></script>
+
+</body>
+
+</html>
