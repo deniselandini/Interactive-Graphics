@@ -1,6 +1,6 @@
-# 2021 IG homework 1
+# HOMEWORK 1 OF INTERACTIVE GRAPHICS COURSE
 
-First Homework for the course of Interactive Graphics 2020/2021.
+Academic year: 2020-2021.
 
 >Student: Denise Landini Mat: `1938388`;
 
