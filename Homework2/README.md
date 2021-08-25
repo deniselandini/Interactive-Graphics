@@ -7,7 +7,7 @@ Matricola: `1938388`;
 
 ## 📝 Assignment
 
--   text [Link 🔗](./Assignment1.pdf)
+-   text [Link 🔗](./Assignment2.pdf)
 
 <details><summary><b>Show text</b></summary>
 
