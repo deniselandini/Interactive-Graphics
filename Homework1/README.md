@@ -43,7 +43,5 @@ Score: `5/5`
 
 ## 🙋 Info
 
-for any doubt or clarification contact me on:
-
--   send me an email at: landini.1938388@studenti.uniroma1.it
+You can contatc me by sending me an email at: landini.1938388@studenti.uniroma1.it
 
