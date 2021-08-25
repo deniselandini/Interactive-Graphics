@@ -10,9 +10,9 @@
 
 Final project for the course of Interactive Graphics 2020/2021.
 
->Student: Alessandro Lambertini Mat: `1938390`;
->
 >Student: Denise Landini Mat: `1938388`;
+>
+>Student: Alessandro Lambertini Mat: `1938390`;
 
 ## 📚 Libraries
 
@@ -74,6 +74,6 @@ We also suggest to play the game in full screen (press `F11`)
 
 for any doubt or clarification contact me on:
 
--   send me an email at: lambertini.1938390@studenti.uniroma1.it
 -   send me an email at: landini.1938388@studenti.uniroma1.it
+-   send me an email at: lambertini.1938390@studenti.uniroma1.it
  
