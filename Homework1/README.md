@@ -6,7 +6,7 @@ First Homework for the course of Interactive Graphics 2020/2021.
 
 ## 📝 Assignment
 
--   text [Link 🔗](./Homework1.pdf)
+-   text [Link 🔗](./Assignment1.pdf)
 
     In this file you can read more about the task to do.
 
