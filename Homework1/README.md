@@ -34,7 +34,7 @@ The solution should be delivered on the GitHub Classroom repository. DO NOT USE 
 
 ## 📜 Report
 
--   report [Link 🔗](./AlessandroLambertini1938390.pdf)
+-   report [Link 🔗](./denise_landini_1938388_report.pdf)
 
     In this file you can read more about the code and the enviroment of the project.
 
@@ -46,5 +46,5 @@ Score: `5/5`
 
 for any doubt or clarification contact me on:
 
--   send me an email at: landini.1938390@studenti.uniroma1.it
+-   send me an email at: landini.1938388@studenti.uniroma1.it
 
