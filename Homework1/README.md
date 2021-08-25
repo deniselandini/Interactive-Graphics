@@ -36,8 +36,6 @@ The solution should be delivered on the GitHub Classroom repository. DO NOT USE 
 
 -   report [Link 🔗](./denise_landini_1938388_report.pdf)
 
-    In this file you can read more about the code and the enviroment of the project.
-
 ## 💯 Final score:
 
 Score: `5/5`
